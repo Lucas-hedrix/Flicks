@@ -43,6 +43,10 @@ const proxyVideoStream = async (req, res, next) => {
     res.setHeader('Content-Length', response.headers['content-length'] || '');
     res.setHeader('Accept-Ranges', 'bytes');
     
+    if (req.query.download === 'true') {
+      res.setHeader('Content-Disposition', 'attachment; filename="video.mp4"');
+    }
+    
     // Prevent caching
     res.setHeader('Cache-Control', 'no-cache, no-store, must-revalidate');
     res.setHeader('Pragma', 'no-cache');

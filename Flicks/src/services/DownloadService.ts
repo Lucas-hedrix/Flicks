@@ -17,8 +17,8 @@ export const DownloadService = {
       
       let downloadEndpoint = '';
       if (result.isProxied) {
-        // If it's an MP4 proxy URL, we can just download it directly
-        downloadEndpoint = result.url;
+        // If it's an MP4 proxy URL, add &download=true so the backend forces attachment
+        downloadEndpoint = result.url.includes('?') ? `${result.url}&download=true` : `${result.url}?download=true`;
       } else {
         // If it's an M3U8 playlist, use our backend chunk downloader
         const baseUrl = import.meta.env.VITE_API_BASE_URL || 'http://localhost:5000';
