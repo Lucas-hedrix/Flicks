@@ -23,7 +23,11 @@ export class VidfastScraper {
       }
       
       const data = await response.json();
-      return { url: data.url, isProxied: data.isProxied };
+      let finalUrl = data.url;
+      if (finalUrl.startsWith('/')) {
+        finalUrl = `${baseUrl}${finalUrl}`;
+      }
+      return { url: finalUrl, isProxied: data.isProxied };
     } catch (error: any) {
       if (error.name === 'AbortError') {
         console.warn('Scraper timeout or request aborted');
