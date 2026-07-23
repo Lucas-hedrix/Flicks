@@ -7,18 +7,18 @@ import {
 
 // Embed sources in priority order — all are free, reliable iframe embeds
 const MOVIE_SOURCES = (id: number) => [
-  { label: 'Source 1',  url: `https://vidsrc.to/embed/movie/${id}` },
-  { label: 'Source 2',  url: `https://autoembed.co/movie/tmdb/${id}` },
-  { label: 'Source 3',  url: `https://embed.su/embed/movie/${id}` },
-  { label: 'Source 4',  url: `https://2embed.cc/embed/movie/${id}` },
+  { label: 'VidSpark',  url: `https://moviesapi.to/movie/${id}` },
+  { label: 'Source 2',  url: `https://vidsrc.to/embed/movie/${id}` },
+  { label: 'Source 3',  url: `https://autoembed.co/movie/tmdb/${id}` },
+  { label: 'Source 4',  url: `https://embed.su/embed/movie/${id}` },
   { label: 'Source 5',  url: `https://multiembed.mov/?video_id=${id}&tmdb=1` },
 ];
 
 const TV_SOURCES = (id: number, season: number, episode: number) => [
-  { label: 'Source 1',  url: `https://vidsrc.to/embed/tv/${id}/${season}/${episode}` },
-  { label: 'Source 2',  url: `https://autoembed.co/tv/tmdb/${id}-${season}-${episode}` },
-  { label: 'Source 3',  url: `https://embed.su/embed/tv/${id}/${season}/${episode}` },
-  { label: 'Source 4',  url: `https://2embed.cc/embed/tv/${id}&s=${season}&e=${episode}` },
+  { label: 'VidSpark',  url: `https://moviesapi.to/tv/${id}-${season}-${episode}` },
+  { label: 'Source 2',  url: `https://vidsrc.to/embed/tv/${id}/${season}/${episode}` },
+  { label: 'Source 3',  url: `https://autoembed.co/tv/tmdb/${id}-${season}-${episode}` },
+  { label: 'Source 4',  url: `https://embed.su/embed/tv/${id}/${season}/${episode}` },
   { label: 'Source 5',  url: `https://multiembed.mov/?video_id=${id}&tmdb=1&s=${season}&e=${episode}` },
 ];
 
