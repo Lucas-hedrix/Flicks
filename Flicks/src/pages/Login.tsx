@@ -93,6 +93,13 @@ export const Login: React.FC = () => {
         animate={shake ? { x: [-10, 10, -10, 10, -5, 5, 0] } : {}}
         transition={{ duration: 0.4 }}
       >
+        <button 
+          onClick={() => navigate('/')}
+          className="absolute top-4 right-4 text-netflix-red hover:text-red-700 p-2 transition"
+          aria-label="Close"
+        >
+          <svg stroke="currentColor" fill="currentColor" strokeWidth="0" viewBox="0 0 352 512" height="24" width="24" xmlns="http://www.w3.org/2000/svg"><path d="M242.72 256l100.07-100.07c12.28-12.28 12.28-32.19 0-44.48l-22.24-22.24c-12.28-12.28-32.19-12.28-44.48 0L176 189.28 75.93 89.21c-12.28-12.28-32.19-12.28-44.48 0L9.21 111.45c-12.28 12.28-12.28 32.19 0 44.48L109.28 256 9.21 356.07c-12.28 12.28-12.28 32.19 0 44.48l22.24 22.24c12.28 12.28 32.2 12.28 44.48 0L176 322.72l100.07 100.07c12.28 12.28 32.2 12.28 44.48 0l22.24-22.24c12.28-12.28 12.28-32.19 0-44.48L242.72 256z"></path></svg>
+        </button>
         <div className="flex flex-col items-center mb-8 w-full">
           <img src={headLightLogo} alt="Flicks Logo" className="h-10 md:h-12 mb-6 dark:invert transition-all" />
           <h1 className="text-2xl font-semibold text-center">
