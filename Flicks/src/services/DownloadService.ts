@@ -1,41 +1,26 @@
-import { VidfastScraper } from './VidfastScraper';
-
 export const DownloadService = {
-  startDownload: async (type: 'movie' | 'tv', id: number, title: string, season?: number, episode?: number) => {
-    try {
-      // 1. Get the m3u8 URL from our scraper
-      const result = await VidfastScraper.extractVideoUrl(type, id, season, episode);
-      if (!result || !result.url) {
-        alert("Could not find the video stream to download.");
-        return;
-      }
+  startDownload: async (
+    type: 'movie' | 'tv',
+    id: number,
+    title: string,
+    season?: number,
+    episode?: number
+  ) => {
+    // Direct download via our backend download endpoint
+    // The backend will use yt-dlp or ffmpeg to stitch the stream into a file
+    const baseUrl = import.meta.env.VITE_API_BASE_URL || 'http://localhost:5000';
+    const encodedTitle = encodeURIComponent(title.replace(/[^a-z0-9]/gi, '_').toLowerCase());
 
-      // 2. We trigger the download via our backend
-      // We will encode the m3u8Url and title, and tell the backend to pipe it as an attachment
-      const encodedUrl = encodeURIComponent(result.url);
-      const encodedTitle = encodeURIComponent(title.replace(/[^a-z0-9]/gi, '_').toLowerCase());
-      
-      let downloadEndpoint = '';
-      if (result.isProxied) {
-        // If it's an MP4 proxy URL, add &download=true so the backend forces attachment
-        downloadEndpoint = result.url.includes('?') ? `${result.url}&download=true` : `${result.url}?download=true`;
-      } else {
-        // If it's an M3U8 playlist, use our backend chunk downloader
-        const baseUrl = import.meta.env.VITE_API_BASE_URL || 'http://localhost:5000';
-        downloadEndpoint = `${baseUrl}/api/download?url=${encodedUrl}&filename=${encodedTitle}.ts`;
-      }
-      
-      // Open the download link in a new tab or iframe so the browser handles the file save dialog
-      const link = document.createElement('a');
-      link.href = downloadEndpoint;
-      link.download = result.isProxied ? `${encodedTitle}.mp4` : `${encodedTitle}.ts`;
-      document.body.appendChild(link);
-      link.click();
-      document.body.removeChild(link);
-
-    } catch (error) {
-      console.error("Failed to start download:", error);
-      alert("An error occurred while starting the download.");
+    let endpoint = `${baseUrl}/api/download?type=${type}&id=${id}&filename=${encodedTitle}`;
+    if (type === 'tv' && season !== undefined && episode !== undefined) {
+      endpoint += `&season=${season}&episode=${episode}`;
     }
-  }
+
+    const link = document.createElement('a');
+    link.href = endpoint;
+    link.download = `${encodedTitle}.ts`;
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+  },
 };
