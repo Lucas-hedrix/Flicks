@@ -33,16 +33,23 @@ const scrapeController = async (req, res, next) => {
     if (videoUrl) {
       logger.info(`Scrape successful, got URL: ${videoUrl}`);
       
-      // Check if it's an MP4 URL - if so, proxy it through the backend
-      if (videoUrl.includes('.mp4')) {
-        logger.info('MP4 detected, creating proxy URL');
-        const proxiedUrl = `/api/proxy/video?url=${encodeURIComponent(videoUrl)}`;
-        logger.info(`Returning proxied URL: ${proxiedUrl}`);
-        return res.json({ url: proxiedUrl, isProxied: true });
+      // If the URL has a ?host= parameter, rewrite the fake domain to the real one
+      let finalUrl = videoUrl;
+      try {
+        const urlObj = new URL(videoUrl);
+        const hostParam = urlObj.searchParams.get('host');
+        if (hostParam) {
+          const realHost = new URL(hostParam).host;
+          urlObj.host = realHost;
+          finalUrl = urlObj.toString();
+          logger.info(`Rewrote fake domain to real host: ${finalUrl}`);
+        }
+      } catch (e) {
+        logger.warn('Failed to parse URL host');
       }
-      
+
       logger.info('Returning direct URL (HLS/M3U8)');
-      return res.json({ url: videoUrl, isProxied: false });
+      return res.json({ url: finalUrl, isProxied: false });
     } else {
       logger.warn('Scrape returned no URL');
       return res.status(404).json({ error: 'Video stream not found' });
