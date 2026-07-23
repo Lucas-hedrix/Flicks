@@ -30,7 +30,7 @@ export const Login: React.FC = () => {
         }
       });
       if (error) throw error;
-      setSuccessMsg(`A 6-digit code has been sent to ${email}`);
+      setSuccessMsg(`An 8-digit code has been sent to ${email}`);
       setStep('otp');
     } catch (error: any) {
       setErrorMsg(error.message || 'Failed to send login code');
@@ -149,16 +149,16 @@ export const Login: React.FC = () => {
             </div>
             <input 
               type="text" 
-              placeholder="6-digit code"
-              maxLength={6}
-              className="w-full bg-white/50 dark:bg-black/40 text-black dark:text-white border border-black/5 dark:border-white/10 px-5 py-4 rounded-xl outline-none focus:bg-white/80 dark:focus:bg-black/60 focus:border-netflix-red/50 dark:focus:border-netflix-red/50 transition-all placeholder:text-gray-500 text-center text-xl tracking-[0.5em] font-bold shadow-sm"
+              placeholder="Enter code"
+              maxLength={8}
+              className="w-full bg-white/50 dark:bg-black/40 text-black dark:text-white border border-black/5 dark:border-white/10 px-5 py-4 rounded-xl outline-none focus:bg-white/80 dark:focus:bg-black/60 focus:border-netflix-red/50 dark:focus:border-netflix-red/50 transition-all placeholder:text-gray-500 placeholder:tracking-normal text-center text-xl tracking-[0.5em] font-bold shadow-sm"
               value={otpToken}
               onChange={(e) => setOtpToken(e.target.value.replace(/\D/g, ''))}
               required
             />
             <button 
               type="submit" 
-              disabled={loading || otpToken.length !== 6}
+              disabled={loading || otpToken.length !== 8}
               className="w-full bg-netflix-red text-white font-bold text-lg py-4 rounded-xl mt-2 hover:bg-[#b80710] hover:shadow-lg hover:shadow-netflix-red/20 transition-all disabled:opacity-70 disabled:cursor-not-allowed"
             >
               {loading ? 'Verifying...' : 'Verify & Login'}

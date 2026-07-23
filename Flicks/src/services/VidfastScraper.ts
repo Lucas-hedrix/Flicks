@@ -4,7 +4,8 @@ export class VidfastScraper {
     const timeoutId = setTimeout(() => controller.abort(), 65000); // 65 second timeout to match backend
 
     try {
-      let endpoint = `http://localhost:5000/api/scrape?type=${type}&id=${id}`;
+      const baseUrl = import.meta.env.VITE_API_BASE_URL || 'http://localhost:5000';
+      let endpoint = `${baseUrl}/api/scrape?type=${type}&id=${id}`;
       if (type === 'tv' && season !== undefined && episode !== undefined) {
         endpoint += `&season=${season}&episode=${episode}`;
       }

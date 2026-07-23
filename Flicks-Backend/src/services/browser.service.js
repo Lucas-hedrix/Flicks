@@ -10,7 +10,6 @@ const launchBrowser = async () => {
   logger.info('Initializing Puppeteer browser instance...');
   const browser = await puppeteer.launch({
     headless: 'new',
-    channel: 'chrome',
     args: [
       '--no-sandbox',
       '--disable-setuid-sandbox',

@@ -15,7 +15,8 @@ export const DownloadService = {
       const encodedUrl = encodeURIComponent(result.url);
       const encodedTitle = encodeURIComponent(title.replace(/[^a-z0-9]/gi, '_').toLowerCase());
       
-      const downloadEndpoint = `http://localhost:5000/api/download?url=${encodedUrl}&filename=${encodedTitle}.ts`;
+      const baseUrl = import.meta.env.VITE_API_BASE_URL || 'http://localhost:5000';
+      const downloadEndpoint = `${baseUrl}/api/download?url=${encodedUrl}&filename=${encodedTitle}.ts`;
       
       // Open the download link in a new tab or iframe so the browser handles the file save dialog
       const link = document.createElement('a');
