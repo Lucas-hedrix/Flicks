@@ -33,23 +33,11 @@ const scrapeController = async (req, res, next) => {
     if (videoUrl) {
       logger.info(`Scrape successful, got URL: ${videoUrl}`);
       
-      // If the URL has a ?host= parameter, rewrite the fake domain to the real one
-      let finalUrl = videoUrl;
-      try {
-        const urlObj = new URL(videoUrl);
-        const hostParam = urlObj.searchParams.get('host');
-        if (hostParam) {
-          const realHost = new URL(hostParam).host;
-          urlObj.host = realHost;
-          finalUrl = urlObj.toString();
-          logger.info(`Rewrote fake domain to real host: ${finalUrl}`);
-        }
-      } catch (e) {
-        logger.warn('Failed to parse URL host');
-      }
-
-      logger.info('Returning direct URL (HLS/M3U8)');
-      return res.json({ url: finalUrl, isProxied: false });
+      // Route the stream through our M3U8 proxy which rewrites all fake-domain
+      // segment URLs inside the playlist to real, fetchable URLs.
+      const proxiedM3u8 = `/api/proxy/m3u8?url=${encodeURIComponent(videoUrl)}`;
+      logger.info(`Returning proxied M3U8 URL: ${proxiedM3u8}`);
+      return res.json({ url: proxiedM3u8, isProxied: true });
     } else {
       logger.warn('Scrape returned no URL');
       return res.status(404).json({ error: 'Video stream not found' });

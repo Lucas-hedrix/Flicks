@@ -62,10 +62,11 @@ export const NetflixMediaPlayer: React.FC = () => {
         }).catch(err => console.error('Failed to fetch subtitles:', err));
 
         if (!result || !result.url) {
-          const vidsrcUrl = type === 'tv' 
-            ? `https://vidsrc.net/embed/tv?tmdb=${content.id}&season=${season || 1}&episode=${episode || 1}`
-            : `https://vidsrc.net/embed/movie?tmdb=${content.id}`;
-            
+          // Primary scraper failed — fall back to a working embed service
+          const vidsrcUrl = type === 'tv'
+            ? `https://vidsrc.to/embed/tv/${content.id}/${season || 1}/${episode || 1}`
+            : `https://vidsrc.to/embed/movie/${content.id}`;
+
           setIframeFallbackUrl(vidsrcUrl);
           setLoading(false);
           return;
