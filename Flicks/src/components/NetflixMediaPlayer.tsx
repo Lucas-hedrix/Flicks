@@ -71,7 +71,7 @@ export const NetflixMediaPlayer: React.FC = () => {
       {/* Top bar */}
       <div
         className={`absolute top-0 left-0 right-0 z-10 flex items-center justify-between px-6 py-4
-          bg-gradient-to-b from-black/90 to-transparent transition-opacity duration-300
+          bg-linear-to-b from-black/90 to-transparent transition-opacity duration-300
           ${showControls ? 'opacity-100' : 'opacity-0 pointer-events-none'}`}
       >
         <button
@@ -94,7 +94,7 @@ export const NetflixMediaPlayer: React.FC = () => {
           </button>
 
           {showSourceMenu && (
-            <div className="absolute right-0 top-12 bg-zinc-900 border border-zinc-700 rounded-xl shadow-2xl overflow-hidden min-w-[180px]">
+            <div className="absolute right-0 top-12 bg-zinc-900 border border-zinc-700 rounded-xl shadow-2xl overflow-hidden min-w-45">
               <div className="px-4 py-2 text-xs text-zinc-400 uppercase tracking-widest border-b border-zinc-700">
                 Switch Source
               </div>

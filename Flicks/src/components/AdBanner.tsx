@@ -29,7 +29,7 @@ export const AdBanner: React.FC<AdBannerProps> = ({ className = '' }) => {
 
   return (
     <div 
-      className={`w-full flex justify-center items-center my-6 bg-zinc-900/50 rounded-lg min-h-[90px] ${className}`}
+      className={`w-full flex justify-center items-center my-6 bg-zinc-900/50 rounded-lg min-h-22.5 ${className}`}
       ref={containerRef}
     >
       <span className="text-zinc-600 text-sm italic">Advertisement Space (Adsterra)</span>
