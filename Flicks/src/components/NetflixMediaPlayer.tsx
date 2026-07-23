@@ -5,21 +5,21 @@ import {
   FaChevronDown,
 } from 'react-icons/fa';
 
-// Embed sources in priority order — prioritizing providers known for fewer/cleaner ads
+// Embed sources in priority order — all are free, reliable iframe embeds
 const MOVIE_SOURCES = (id: number) => [
-  { label: 'Source 1 (Fast & Clean)',  url: `https://vidlink.pro/movie/${id}` },
-  { label: 'Source 2 (Alt Clean)',  url: `https://vidsrc.cc/v2/embed/movie/${id}` },
+  { label: 'Source 1',  url: `https://vidsrc.to/embed/movie/${id}` },
+  { label: 'Source 2',  url: `https://autoembed.co/movie/tmdb/${id}` },
   { label: 'Source 3',  url: `https://embed.su/embed/movie/${id}` },
-  { label: 'Source 4 (With Downloads)',  url: `https://2embed.cc/embed/movie/${id}` },
-  { label: 'Source 5',  url: `https://vidsrc.to/embed/movie/${id}` },
+  { label: 'Source 4',  url: `https://2embed.cc/embed/movie/${id}` },
+  { label: 'Source 5',  url: `https://multiembed.mov/?video_id=${id}&tmdb=1` },
 ];
 
 const TV_SOURCES = (id: number, season: number, episode: number) => [
-  { label: 'Source 1 (Fast & Clean)',  url: `https://vidlink.pro/tv/${id}/${season}/${episode}` },
-  { label: 'Source 2 (Alt Clean)',  url: `https://vidsrc.cc/v2/embed/tv/${id}/${season}/${episode}` },
+  { label: 'Source 1',  url: `https://vidsrc.to/embed/tv/${id}/${season}/${episode}` },
+  { label: 'Source 2',  url: `https://autoembed.co/tv/tmdb/${id}-${season}-${episode}` },
   { label: 'Source 3',  url: `https://embed.su/embed/tv/${id}/${season}/${episode}` },
-  { label: 'Source 4 (With Downloads)',  url: `https://2embed.cc/embed/tv/${id}&s=${season}&e=${episode}` },
-  { label: 'Source 5',  url: `https://vidsrc.to/embed/tv/${id}/${season}/${episode}` },
+  { label: 'Source 4',  url: `https://2embed.cc/embed/tv/${id}&s=${season}&e=${episode}` },
+  { label: 'Source 5',  url: `https://multiembed.mov/?video_id=${id}&tmdb=1&s=${season}&e=${episode}` },
 ];
 
 export const NetflixMediaPlayer: React.FC = () => {
