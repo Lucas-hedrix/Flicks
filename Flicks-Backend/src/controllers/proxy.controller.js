@@ -12,18 +12,44 @@ const proxyVideoStream = async (req, res, next) => {
   try {
     logger.info(`Proxying video stream from: ${url}`);
 
-    // Extract the domain from the URL to use as Referer
+    let targetUrl = url;
     const videoUrlObj = new URL(url);
-    const refererUrl = `${videoUrlObj.protocol}//${videoUrlObj.host}`;
-    logger.info(`Using referer: ${refererUrl}`);
+    let refererUrl = `${videoUrlObj.protocol}//${videoUrlObj.host}`;
+    let originUrl = refererUrl;
+    
+    // Many CDNs encode required headers in the query string (e.g. ?headers={"referer":"..."})
+    const encodedHeaders = videoUrlObj.searchParams.get('headers');
+    if (encodedHeaders) {
+      try {
+        const parsedHeaders = JSON.parse(encodedHeaders);
+        if (parsedHeaders.referer) refererUrl = parsedHeaders.referer;
+        if (parsedHeaders.origin) originUrl = parsedHeaders.origin;
+      } catch (e) {
+        logger.warn('Failed to parse embedded headers');
+      }
+    }
+    
+    // Some CDNs provide the real host in a ?host= parameter
+    const hostParam = videoUrlObj.searchParams.get('host');
+    if (hostParam) {
+      try {
+        const hostObj = new URL(hostParam);
+        videoUrlObj.host = hostObj.host;
+        targetUrl = videoUrlObj.toString();
+      } catch (e) {
+        logger.warn('Failed to parse host param');
+      }
+    }
 
-    const response = await axios.get(url, {
+    logger.info(`Using referer: ${refererUrl}, origin: ${originUrl}, targetUrl: ${targetUrl}`);
+
+    const response = await axios.get(targetUrl, {
       responseType: 'stream',
       timeout: 30000,
       headers: {
         'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36',
         'Referer': refererUrl,
-        'Origin': refererUrl,
+        'Origin': originUrl,
         'Accept': '*/*',
         'Accept-Language': 'en-US,en;q=0.9',
         'Accept-Encoding': 'gzip, deflate',
