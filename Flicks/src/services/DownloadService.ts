@@ -6,14 +6,31 @@ export const DownloadService = {
     _season?: number,
     _episode?: number
   ) => {
-    // DLHub doesn't have an open API to auto-fetch direct links (they protect it with captchas/ads).
-    // The most seamless integration is to open their search page with the exact title so the user
-    // can just click the first result.
-    const searchQuery = encodeURIComponent(title);
-    const dlhubUrl = `https://dlhub.cc/search?q=${searchQuery}`;
+    // DLHub uses a POST request for their search engine. To pre-fill the search
+    // automatically, we have to create a hidden form and submit it.
+    const form = document.createElement('form');
+    form.method = 'POST';
+    form.action = 'https://dlhub.cc/search';
+    form.target = '_blank'; // Open in new tab
     
-    // Open in new tab
-    window.open(dlhubUrl, '_blank', 'noopener,noreferrer');
+    const inputQ = document.createElement('input');
+    inputQ.type = 'hidden';
+    inputQ.name = 'q';
+    inputQ.value = title;
+    
+    const inputSource = document.createElement('input');
+    inputSource.type = 'hidden';
+    inputSource.name = 'source';
+    inputSource.value = _type === 'tv' ? 'series' : 'movies';
+
+    form.appendChild(inputQ);
+    form.appendChild(inputSource);
+    document.body.appendChild(form);
+    
+    form.submit();
+    
+    // Cleanup
+    document.body.removeChild(form);
   },
 };
 
