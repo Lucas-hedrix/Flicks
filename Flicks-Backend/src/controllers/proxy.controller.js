@@ -43,17 +43,23 @@ const proxyVideoStream = async (req, res, next) => {
 
     logger.info(`Using referer: ${refererUrl}, origin: ${originUrl}, targetUrl: ${targetUrl}`);
 
+    const headers = {
+      'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36',
+      'Referer': refererUrl,
+      'Origin': originUrl,
+      'Accept': '*/*',
+      'Accept-Language': 'en-US,en;q=0.9',
+      'Accept-Encoding': 'gzip, deflate',
+    };
+
+    if (req.headers.range) {
+      headers['Range'] = req.headers.range;
+    }
+
     const response = await axios.get(targetUrl, {
       responseType: 'stream',
       timeout: 30000,
-      headers: {
-        'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36',
-        'Referer': refererUrl,
-        'Origin': originUrl,
-        'Accept': '*/*',
-        'Accept-Language': 'en-US,en;q=0.9',
-        'Accept-Encoding': 'gzip, deflate',
-      },
+      headers: headers,
       validateStatus: () => true, // Accept all status codes
     });
 
@@ -65,8 +71,16 @@ const proxyVideoStream = async (req, res, next) => {
     logger.info(`Video source returned ${response.status}, content-type: ${response.headers['content-type']}`);
 
     // Set appropriate headers for video streaming
+    res.status(response.status);
     res.setHeader('Content-Type', response.headers['content-type'] || 'video/mp4');
-    res.setHeader('Content-Length', response.headers['content-length'] || '');
+    
+    if (response.headers['content-length']) {
+      res.setHeader('Content-Length', response.headers['content-length']);
+    }
+    if (response.headers['content-range']) {
+      res.setHeader('Content-Range', response.headers['content-range']);
+    }
+    
     res.setHeader('Accept-Ranges', 'bytes');
     
     if (req.query.download === 'true') {
