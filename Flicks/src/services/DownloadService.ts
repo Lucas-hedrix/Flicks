@@ -6,21 +6,14 @@ export const DownloadService = {
     season?: number,
     episode?: number
   ) => {
-    // Direct download via our backend download endpoint
-    // The backend will use yt-dlp or ffmpeg to stitch the stream into a file
-    const baseUrl = import.meta.env.VITE_API_BASE_URL || 'http://localhost:5000';
-    const encodedTitle = encodeURIComponent(title.replace(/[^a-z0-9]/gi, '_').toLowerCase());
-
-    let endpoint = `${baseUrl}/api/download?type=${type}&id=${id}&filename=${encodedTitle}`;
-    if (type === 'tv' && season !== undefined && episode !== undefined) {
-      endpoint += `&season=${season}&episode=${episode}`;
-    }
-
-    const link = document.createElement('a');
-    link.href = endpoint;
-    link.download = `${encodedTitle}.ts`;
-    document.body.appendChild(link);
-    link.click();
-    document.body.removeChild(link);
+    // DLHub doesn't have an open API to auto-fetch direct links (they protect it with captchas/ads).
+    // The most seamless integration is to open their search page with the exact title so the user
+    // can just click the first result.
+    const searchQuery = encodeURIComponent(title);
+    const dlhubUrl = `https://dlhub.cc/search?q=${searchQuery}`;
+    
+    // Open in new tab
+    window.open(dlhubUrl, '_blank', 'noopener,noreferrer');
   },
 };
+
