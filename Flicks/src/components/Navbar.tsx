@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { Link, useNavigate, useLocation } from 'react-router-dom';
-import { FaSearch as FaSearchIcon, FaSun, FaMoon } from 'react-icons/fa';
+import { FaSearch as FaSearchIcon, FaSun, FaMoon, FaBars, FaTimes } from 'react-icons/fa';
 import { TMDBService } from '../services/TMDBService';
 import type { MediaItem } from '../services/TMDBService';
 import { useAuth } from '../context/AuthContext';
@@ -13,6 +13,7 @@ export const Navbar: React.FC = () => {
   const [searchQuery, setSearchQuery] = useState('');
   const [suggestions, setSuggestions] = useState<MediaItem[]>([]);
   const [showDropdown, setShowDropdown] = useState(false);
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const searchContainerRef = useRef<HTMLDivElement>(null);
   const dropdownRef = useRef<HTMLDivElement>(null);
   const navigate = useNavigate();
@@ -95,7 +96,15 @@ export const Navbar: React.FC = () => {
 
   return (
     <header className={`fixed top-0 w-full z-40 transition-colors duration-300 px-4 md:px-12 py-4 flex justify-between items-center ${isScrolled ? 'bg-(--bg-primary) shadow-md dark:shadow-none' : 'bg-linear-to-b from-(--bg-primary) to-transparent'}`}>
-      <div className="flex items-center gap-8">
+      <div className="flex items-center gap-4 md:gap-8">
+        {/* Hamburger Menu Toggle (Mobile) */}
+        <button 
+          className="md:hidden text-netflix-red hover:text-red-700 transition flex items-center justify-center p-1"
+          onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
+        >
+          {isMobileMenuOpen ? <FaTimes size={24} /> : <FaBars size={24} />}
+        </button>
+
         <Link to="/" className="flex items-center">
           <img src={headLightLogo} alt="Flicks" className="h-6 md:h-8 dark:invert transition-all" />
         </Link>
@@ -165,7 +174,7 @@ export const Navbar: React.FC = () => {
         {/* Theme Toggle */}
         <button 
           onClick={toggleTheme} 
-          className="text-(--text-primary) hover:text-gray-500 focus:outline-none transition-colors hidden sm:block"
+          className="text-(--text-primary) hover:text-gray-500 focus:outline-none transition-colors"
           aria-label="Toggle Theme"
         >
           {theme === 'dark' ? <FaSun size={20} /> : <FaMoon size={20} />}
@@ -201,6 +210,16 @@ export const Navbar: React.FC = () => {
           </Link>
         )}
       </div>
+
+      {/* Mobile Menu Dropdown */}
+      {isMobileMenuOpen && (
+        <div className="absolute top-full left-0 w-full bg-(--bg-primary) border-b border-(--border-light) shadow-lg flex flex-col md:hidden py-4 px-6 gap-4 z-50 transition-all">
+          <Link to="/" onClick={() => setIsMobileMenuOpen(false)} className={`transition ${location.pathname === '/' ? 'text-(--text-primary) font-bold' : 'text-(--text-secondary) hover:text-(--text-primary)'}`}>Home</Link>
+          <Link to="/tv" onClick={() => setIsMobileMenuOpen(false)} className={`transition ${location.pathname === '/tv' ? 'text-(--text-primary) font-bold' : 'text-(--text-secondary) hover:text-(--text-primary)'}`}>TV Shows</Link>
+          <Link to="/movies" onClick={() => setIsMobileMenuOpen(false)} className={`transition ${location.pathname === '/movies' ? 'text-(--text-primary) font-bold' : 'text-(--text-secondary) hover:text-(--text-primary)'}`}>Movies</Link>
+          <Link to="/latest" onClick={() => setIsMobileMenuOpen(false)} className={`transition ${location.pathname === '/latest' ? 'text-(--text-primary) font-bold' : 'text-(--text-secondary) hover:text-(--text-primary)'}`}>New & Popular</Link>
+        </div>
+      )}
     </header>
   );
 };

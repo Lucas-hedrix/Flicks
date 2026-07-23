@@ -70,27 +70,27 @@ export const NetflixMediaPlayer: React.FC = () => {
     >
       {/* Top bar */}
       <div
-        className={`absolute top-0 left-0 right-0 z-10 flex items-center justify-between px-6 py-4
-          bg-linear-to-b from-black/90 to-transparent transition-opacity duration-300
+        className={`absolute top-0 left-0 right-0 z-10 flex items-center justify-between px-3 md:px-6 py-3 md:py-4
+          bg-linear-to-b from-black/90 to-transparent transition-opacity duration-300 gap-2
           ${showControls ? 'opacity-100' : 'opacity-0 pointer-events-none'}`}
       >
         <button
           onClick={closePlayer}
-          className="text-white hover:text-gray-300 p-2 rounded-full hover:bg-white/10 transition"
+          className="text-white hover:text-gray-300 p-1.5 md:p-2 rounded-full hover:bg-white/10 transition shrink-0"
         >
-          <FaArrowLeft size={22} />
+          <FaArrowLeft className="text-lg md:text-[22px]" />
         </button>
 
-        <div className="text-white font-bold text-lg drop-shadow-md tracking-wide">{title}</div>
+        <div className="text-white font-bold text-sm md:text-lg drop-shadow-md tracking-wide truncate flex-1 text-center px-2">{title}</div>
 
         {/* Source picker */}
-        <div className="relative" onClick={(e) => e.stopPropagation()}>
+        <div className="relative shrink-0" onClick={(e) => e.stopPropagation()}>
           <button
             onClick={() => setShowSourceMenu(!showSourceMenu)}
-            className="flex items-center gap-2 bg-white/10 hover:bg-white/20 text-white px-4 py-2 rounded-full text-sm font-semibold transition border border-white/20"
+            className="flex items-center gap-1 md:gap-2 bg-white/10 hover:bg-white/20 text-white px-3 md:px-4 py-1.5 md:py-2 rounded-full text-xs md:text-sm font-semibold transition border border-white/20 max-w-[35vw] md:max-w-none"
           >
-            {currentSource.label}
-            <FaChevronDown size={12} className={`transition-transform ${showSourceMenu ? 'rotate-180' : ''}`} />
+            <span className="truncate">{currentSource.label}</span>
+            <FaChevronDown className={`shrink-0 text-[10px] md:text-[12px] transition-transform ${showSourceMenu ? 'rotate-180' : ''}`} />
           </button>
 
           {showSourceMenu && (
