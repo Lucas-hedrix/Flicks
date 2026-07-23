@@ -25,8 +25,7 @@ const buildScrapeSources = (type, id, season, episode) => {
   ];
 };
 
-const isStreamUrl = (url) =>
-  url.includes('.m3u8') || url.includes('.mp4');
+const isStreamUrl = (url) => url.includes('.m3u8');
 
 const resolveHlsMasterPlaylist = async (playlistUrl) => {
   try {
