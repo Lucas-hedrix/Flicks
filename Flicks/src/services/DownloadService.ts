@@ -1,10 +1,10 @@
 export const DownloadService = {
   startDownload: async (
-    type: 'movie' | 'tv',
-    id: number,
+    _type: 'movie' | 'tv',
+    _id: number,
     title: string,
-    season?: number,
-    episode?: number
+    _season?: number,
+    _episode?: number
   ) => {
     // DLHub doesn't have an open API to auto-fetch direct links (they protect it with captchas/ads).
     // The most seamless integration is to open their search page with the exact title so the user
