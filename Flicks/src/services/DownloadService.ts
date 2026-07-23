@@ -15,13 +15,20 @@ export const DownloadService = {
       const encodedUrl = encodeURIComponent(result.url);
       const encodedTitle = encodeURIComponent(title.replace(/[^a-z0-9]/gi, '_').toLowerCase());
       
-      const baseUrl = import.meta.env.VITE_API_BASE_URL || 'http://localhost:5000';
-      const downloadEndpoint = `${baseUrl}/api/download?url=${encodedUrl}&filename=${encodedTitle}.ts`;
+      let downloadEndpoint = '';
+      if (result.isProxied) {
+        // If it's an MP4 proxy URL, we can just download it directly
+        downloadEndpoint = result.url;
+      } else {
+        // If it's an M3U8 playlist, use our backend chunk downloader
+        const baseUrl = import.meta.env.VITE_API_BASE_URL || 'http://localhost:5000';
+        downloadEndpoint = `${baseUrl}/api/download?url=${encodedUrl}&filename=${encodedTitle}.ts`;
+      }
       
       // Open the download link in a new tab or iframe so the browser handles the file save dialog
       const link = document.createElement('a');
       link.href = downloadEndpoint;
-      link.download = `${encodedTitle}.ts`;
+      link.download = result.isProxied ? `${encodedTitle}.mp4` : `${encodedTitle}.ts`;
       document.body.appendChild(link);
       link.click();
       document.body.removeChild(link);
