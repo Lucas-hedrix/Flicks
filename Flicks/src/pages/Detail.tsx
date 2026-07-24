@@ -5,6 +5,7 @@ import type { MediaItem } from '../services/TMDBService';
 import { useVideoPlayer } from '../context/VideoPlayerContext';
 import { DownloadService } from '../services/DownloadService';
 import { FaPlay, FaArrowLeft, FaDownload } from 'react-icons/fa';
+import SEO from '../components/SEO';
 const TMDB_IMG = (path: string | null | undefined, size = 'w500') =>
   path ? `https://image.tmdb.org/t/p/${size}${path}` : '';
 
@@ -112,6 +113,11 @@ export const Detail: React.FC = () => {
 
   return (
     <div className="min-h-screen bg-netflix-black text-white overflow-y-auto pb-20">
+      <SEO 
+        title={title} 
+        description={content.overview || `Watch ${title} on Flicks`} 
+        type={contentIsMovie ? "video.movie" : "video.tv_show"} 
+      />
       <div className="relative w-full h-[50vh] md:h-[70vh]">
         <img 
           src={imageUrl} 
