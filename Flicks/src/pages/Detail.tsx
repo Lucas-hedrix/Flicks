@@ -120,7 +120,7 @@ export const Detail: React.FC = () => {
         />
         <div className="absolute inset-0 bg-linear-to-t from-netflix-black via-netflix-black/50 to-transparent" />
         
-        <div className="absolute top-0 left-0 right-0 p-4 flex justify-between items-center z-10">
+        <div className="absolute top-16 md:top-20 left-0 right-0 p-4 flex justify-between items-center z-10">
           <button onClick={() => navigate(-1)} className="p-2 bg-black/50 rounded-full hover:bg-black/80 transition">
             <FaArrowLeft className="text-white" />
           </button>
