@@ -9,7 +9,7 @@ const __dirname = path.dirname(__filename);
 // Ensure we fetch some popular movies and tv shows to include in the sitemap
 const API_KEY = 'd2e06759b45c2e45d4caba59984fec9c'; // From your constants.ts
 const BASE_URL = 'https://api.themoviedb.org/3';
-const DOMAIN = 'https://flicks.com'; // Replace this with your actual domain when you get one, or your vercel domain!
+const DOMAIN = 'https://flicks-five.vercel.app'; // Updated to your actual Vercel domain
 
 async function generateSitemap() {
   console.log('Generating sitemap...');
