@@ -7,6 +7,7 @@ import { Latest } from './pages/Latest';
 import { VideoPlayerProvider } from './context/VideoPlayerContext';
 import { NetflixMediaPlayer } from './components/NetflixMediaPlayer';
 import { Navbar } from './components/Navbar';
+import { ContactModal } from './components/ContactModal';
 import { Search } from './pages/Search';
 import { Login } from './pages/Login';
 import { AuthProvider } from './context/AuthContext';
@@ -21,6 +22,7 @@ function App() {
             <div className="min-h-screen transition-colors duration-300">
               
               <Navbar />
+              <ContactModal />
 
               {/* Main Content */}
               <main>
