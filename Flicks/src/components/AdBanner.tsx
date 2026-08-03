@@ -8,23 +8,15 @@ export const AdBanner: React.FC<AdBannerProps> = ({ className = '' }) => {
   const containerRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
-    // --- ADSTERRA SCRIPT INSTRUCTIONS ---
-    // Adsterra will provide you with a code snippet that looks like this:
-    // <script type='text/javascript' src='//your-adsterra-code.com/invoke.js'></script>
-    // 
-    // To implement it safely in React:
-    // 1. Uncomment the code below.
-    // 2. Replace the 'src' string with your actual Adsterra script URL.
-    
-    /*
-    if (containerRef.current && !containerRef.current.firstChild) {
+   
+     if (containerRef.current && !containerRef.current.firstChild) {
       const script = document.createElement('script');
       script.type = 'text/javascript';
-      script.src = '//your-adsterra-script-url-here.js';
+      script.src = 'https://valuationappeared.com/49/57/2e/49572e4d1d403f04572eaef96eb52476.js';
       script.async = true;
       containerRef.current.appendChild(script);
     }
-    */
+    
   }, []);
 
   return (
