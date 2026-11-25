@@ -16,7 +16,7 @@ const proxyVideoStream = async (req, res, next) => {
     const videoUrlObj = new URL(url);
     let refererUrl = `${videoUrlObj.protocol}//${videoUrlObj.host}`;
     let originUrl = refererUrl;
-    
+
     // Many CDNs encode required headers in the query string (e.g. ?headers={"referer":"..."})
     const encodedHeaders = videoUrlObj.searchParams.get('headers');
     if (encodedHeaders) {
@@ -28,6 +28,10 @@ const proxyVideoStream = async (req, res, next) => {
         logger.warn('Failed to parse embedded headers');
       }
     }
+
+    // Referer/Origin captured during scraping take precedence (highest fidelity).
+    if (req.query.ref) refererUrl = req.query.ref;
+    if (req.query.origin) originUrl = req.query.origin;
     
     // Some CDNs provide the real host in a ?host= parameter
     const hostParam = videoUrlObj.searchParams.get('host');

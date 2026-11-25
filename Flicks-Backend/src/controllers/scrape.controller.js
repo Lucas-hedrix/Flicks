@@ -1,14 +1,27 @@
 const { scrapeVideoStream } = require('../services/scraper.service');
 const logger = require('../utils/logger');
 
+// Build the client-facing proxied URL from the scraper's rich result.
+// HLS goes through the m3u8 rewriter; direct MP4 through the video streamer.
+// Captured referer/origin ride along as query params so the proxy can replay
+// them and defeat CDN hotlink protection.
+const buildProxiedUrl = ({ url, kind, referer, origin }) => {
+  const params = new URLSearchParams({ url });
+  if (referer) params.set('ref', referer);
+  if (origin) params.set('origin', origin);
+
+  const base = kind === 'mp4' ? '/api/proxy/video' : '/api/proxy/m3u8';
+  return `${base}?${params.toString()}`;
+};
+
 const scrapeController = async (req, res, next) => {
   const { type, id, season, episode } = req.query;
-  
+
   logger.info(`Scrape request: type=${type}, id=${id}, season=${season}, episode=${episode}`);
-  
+
   // Create AbortController for this request
   const abortController = new AbortController();
-  
+
   // Handle client disconnect
   req.on('close', () => {
     if (!res.headersSent) {
@@ -26,25 +39,32 @@ const scrapeController = async (req, res, next) => {
   }, 60000);
 
   try {
-    let videoUrl = await scrapeVideoStream(type, id, season, episode, abortController.signal);
-    
+    const result = await scrapeVideoStream(type, id, season, episode, abortController.signal);
+
     clearTimeout(timeoutId);
 
-    if (videoUrl) {
-      logger.info(`Scrape successful, got URL: ${videoUrl}`);
-      
-      // Route the stream through our M3U8 proxy which rewrites all fake-domain
-      // segment URLs inside the playlist to real, fetchable URLs.
-      const proxiedM3u8 = `/api/proxy/m3u8?url=${encodeURIComponent(videoUrl)}`;
-      logger.info(`Returning proxied M3U8 URL: ${proxiedM3u8}`);
-      return res.json({ url: proxiedM3u8, isProxied: true });
+    if (result && result.url) {
+      logger.info(`Scrape successful (${result.kind}): ${result.url}`);
+
+      const proxiedUrl = buildProxiedUrl(result);
+      logger.info(`Returning proxied URL: ${proxiedUrl}`);
+      // Include the raw stream details so the frontend can drive an IDM-style
+      // download of the actual media file (not just a proxied playback URL).
+      return res.json({
+        url: proxiedUrl,
+        isProxied: true,
+        kind: result.kind,
+        rawUrl: result.url,
+        referer: result.referer || '',
+        origin: result.origin || '',
+      });
     } else {
       logger.warn('Scrape returned no URL');
       return res.status(404).json({ error: 'Video stream not found' });
     }
   } catch (error) {
     clearTimeout(timeoutId);
-    
+
     if (abortController.signal.aborted) {
       logger.info('Scraping was aborted');
       if (!res.headersSent) {
@@ -52,7 +72,7 @@ const scrapeController = async (req, res, next) => {
       }
       return;
     }
-    
+
     logger.error(`Scrape error: ${error.message}`);
     next(error);
   }

@@ -50,7 +50,33 @@ const validateDownload = (req, res, next) => {
   next();
 };
 
+/**
+ * Validation for the IDM-style download endpoint. The stream URL is a raw CDN
+ * host (e.g. flow.dasnext.store) that isn't in ALLOWED_HOSTS — and our proxy
+ * routes already proxy arbitrary hosts — so we only enforce protocol + shape,
+ * not a host allowlist. This mirrors the posture of /api/proxy/m3u8.
+ */
+const validateDownloadStream = (req, res, next) => {
+  const { url } = req.query;
+
+  if (!url) {
+    return res.status(400).json({ error: 'Missing url parameter' });
+  }
+
+  try {
+    const parsedUrl = new URL(url);
+    if (!['http:', 'https:'].includes(parsedUrl.protocol)) {
+      return res.status(400).json({ error: 'Invalid URL protocol' });
+    }
+  } catch (error) {
+    return res.status(400).json({ error: 'Invalid URL format' });
+  }
+
+  next();
+};
+
 module.exports = {
   validateScrape,
-  validateDownload
+  validateDownload,
+  validateDownloadStream
 };

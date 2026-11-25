@@ -3,6 +3,7 @@ import { Home } from './pages/Home';
 import { Detail } from './pages/Detail';
 import { TVShows } from './pages/TVShows';
 import { Movies } from './pages/Movies';
+import { Anime } from './pages/Anime';
 import { Latest } from './pages/Latest';
 import { VideoPlayerProvider } from './context/VideoPlayerContext';
 import { NetflixMediaPlayer } from './components/NetflixMediaPlayer';
@@ -31,6 +32,7 @@ function App() {
                   <Route path="/login" element={<Login />} />
                   <Route path="/tv" element={<TVShows />} />
                   <Route path="/movies" element={<Movies />} />
+                  <Route path="/anime" element={<Anime />} />
                   <Route path="/latest" element={<Latest />} />
                   <Route path="/search" element={<Search />} />
                   <Route path="/detail/:type/:id" element={<Detail />} />

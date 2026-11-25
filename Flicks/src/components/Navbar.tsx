@@ -112,6 +112,7 @@ export const Navbar: React.FC = () => {
           <Link to="/" className={`transition ${location.pathname === '/' ? 'text-(--text-primary) font-bold' : 'hover:text-(--text-primary)'}`}>Home</Link>
           <Link to="/tv" className={`transition ${location.pathname === '/tv' ? 'text-(--text-primary) font-bold' : 'hover:text-(--text-primary)'}`}>TV Shows</Link>
           <Link to="/movies" className={`transition ${location.pathname === '/movies' ? 'text-(--text-primary) font-bold' : 'hover:text-(--text-primary)'}`}>Movies</Link>
+          <Link to="/anime" className={`transition ${location.pathname === '/anime' ? 'text-(--text-primary) font-bold' : 'hover:text-(--text-primary)'}`}>Anime</Link>
           <Link to="/latest" className={`transition ${location.pathname === '/latest' ? 'text-(--text-primary) font-bold' : 'hover:text-(--text-primary)'}`}>New & Popular</Link>
         </nav>
       </div>
@@ -217,6 +218,7 @@ export const Navbar: React.FC = () => {
           <Link to="/" onClick={() => setIsMobileMenuOpen(false)} className={`transition ${location.pathname === '/' ? 'text-(--text-primary) font-bold' : 'text-(--text-secondary) hover:text-(--text-primary)'}`}>Home</Link>
           <Link to="/tv" onClick={() => setIsMobileMenuOpen(false)} className={`transition ${location.pathname === '/tv' ? 'text-(--text-primary) font-bold' : 'text-(--text-secondary) hover:text-(--text-primary)'}`}>TV Shows</Link>
           <Link to="/movies" onClick={() => setIsMobileMenuOpen(false)} className={`transition ${location.pathname === '/movies' ? 'text-(--text-primary) font-bold' : 'text-(--text-secondary) hover:text-(--text-primary)'}`}>Movies</Link>
+          <Link to="/anime" onClick={() => setIsMobileMenuOpen(false)} className={`transition ${location.pathname === '/anime' ? 'text-(--text-primary) font-bold' : 'text-(--text-secondary) hover:text-(--text-primary)'}`}>Anime</Link>
           <Link to="/latest" onClick={() => setIsMobileMenuOpen(false)} className={`transition ${location.pathname === '/latest' ? 'text-(--text-primary) font-bold' : 'text-(--text-secondary) hover:text-(--text-primary)'}`}>New & Popular</Link>
         </div>
       )}

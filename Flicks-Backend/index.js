@@ -1,5 +1,6 @@
 const app = require('./src/app');
 const { initBrowser, closeBrowser } = require('./src/services/browser.service');
+const { initAdblock } = require('./src/services/adblock.service');
 const { PORT } = require('./src/config/env');
 const logger = require('./src/utils/logger');
 
@@ -9,6 +10,10 @@ const startServer = async () => {
   try {
     // Initialize persistent browser instance for the pool
     await initBrowser();
+
+    // Warm the adblock filter lists in the background so the first scrape isn't
+    // slowed by the network download (non-blocking, non-fatal).
+    initAdblock();
 
     server = app.listen(PORT, () => {
       logger.info(`Flicks Backend Server listening on port ${PORT}`);

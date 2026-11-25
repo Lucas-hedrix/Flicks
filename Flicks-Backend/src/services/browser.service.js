@@ -66,9 +66,29 @@ const closeBrowser = async () => {
   }
 };
 
+// Force a fresh browser after a fatal crash (Target/Session closed). Used by the
+// scraper's bounded retry so a dead browser doesn't poison every subsequent request.
+const relaunchBrowser = async () => {
+  logger.warn('Relaunching Puppeteer browser instance...');
+  await closeBrowser();
+  return ensureBrowser();
+};
+
+// Create an isolated incognito-style context with its own page. Each scrape runs
+// in its own context so concurrent scrapes can't leak cookies/state into each
+// other and can be torn down independently (caller must close the context).
+const createIsolatedContext = async () => {
+  const browser = await ensureBrowser();
+  const context = await browser.createBrowserContext();
+  const page = await context.newPage();
+  return { context, page };
+};
+
 module.exports = {
   initBrowser,
   ensureBrowser,
   getBrowser,
   closeBrowser,
+  relaunchBrowser,
+  createIsolatedContext,
 };

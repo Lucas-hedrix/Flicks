@@ -79,6 +79,35 @@ export const TMDBService = {
     return res.data;
   },
 
+  getTrendingAnime: async (_timeWindow: 'day' | 'week' = 'week', page: number = 1) => {
+    // Override sort_by to popularity.desc since discover doesn't support trending well with filters
+    const res = await api.get('/discover/tv', {
+      params: { with_genres: 16, with_original_language: 'ja', sort_by: 'popularity.desc', page }
+    });
+    return res.data;
+  },
+
+  getPopularAnime: async (page: number = 1) => {
+    const res = await api.get('/discover/tv', {
+      params: { with_genres: 16, with_original_language: 'ja', sort_by: 'popularity.desc', page },
+    });
+    return res.data;
+  },
+
+  getTopRatedAnime: async (page: number = 1) => {
+    const res = await api.get('/discover/tv', {
+      params: { with_genres: 16, with_original_language: 'ja', sort_by: 'vote_average.desc', 'vote_count.gte': 200, page },
+    });
+    return res.data;
+  },
+
+  getPopularAnimeMovies: async (page: number = 1) => {
+    const res = await api.get('/discover/movie', {
+      params: { with_genres: 16, with_original_language: 'ja', sort_by: 'popularity.desc', page },
+    });
+    return res.data;
+  },
+
   getMovieDetails: async (id: number) => {
     const res = await api.get(`/movie/${id}`);
     return res.data;
